@@ -38,7 +38,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref, onMounted } from "vue";
 import axios from "axios";
 
