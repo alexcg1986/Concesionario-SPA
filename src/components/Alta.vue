@@ -22,6 +22,7 @@
                     optionLabel="nombre"
                     optionValue="id"
                     placeholder="Seleccione un modelo"
+                    :disabled="isDisabled"
                 />
             </div>
             <div class="input p-d-flex p-flex-row p-jc-between p-ai-center">
@@ -34,22 +35,42 @@
                 />
             </div>
         </div>
-        <Button label="Aceptar" class="p-button-raised button" />
+        <Button
+            label="Guardar"
+            class="p-button-raised button"
+            @click="saveCar"
+        />
     </div>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import axios from "axios";
 
 export default defineComponent({
     setup() {
         const url = "http://localhost:8080/api/";
+        const isDisabled = ref(true);
         const selectedBrand = ref();
         const selectedModel = ref();
         const brands = ref([]);
         const models = ref([]);
         const plate = ref();
+        const parameters = {
+            marcaId: Number
+        };
+        const car = {
+            marca: {
+                id: Number
+            },
+            modelo: {
+                id: Number
+            },
+            matricula: String,
+            usuario: {
+                id: Number
+            }
+        };
         const getBrands = async () => {
             await axios
                 .get(url + "marca")
@@ -59,25 +80,41 @@ export default defineComponent({
                 });
         };
         const getModels = async () => {
+            parameters.marcaId = selectedBrand.value;
             await axios
-                .get(url + "modelo")
-                .then(async (res) => await (models.value = res.data))
+                .post(url + "modelo/filtrado", parameters)
+                .then(async (res) => {
+                    await (models.value = res.data);
+                    isDisabled.value = false;
+                })
                 .catch((error) => {
                     console.log(error);
                 });
         };
-        onMounted(() => {
-            getBrands;
-            getModels;
-        });
+        const saveCar = async () => {
+            car.marca.id = selectedBrand.value;
+            car.modelo.id = selectedModel.value;
+            car.matricula = plate.value;
+            car.usuario.id = 1;
+            await axios
+                .post(url, car)
+                .then(async (res) => {
+                    await console.log(res.status);
+                })
+                .catch((error) => console.log(error));
+        };
+        onMounted(getBrands);
+        watch(selectedBrand, getModels);
         return {
+            isDisabled,
             selectedBrand,
             selectedModel,
             brands,
             models,
             plate,
             getBrands,
-            getModels
+            getModels,
+            saveCar
         };
     }
 });
