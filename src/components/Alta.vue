@@ -2,10 +2,10 @@
     <div
         class="alta p-col-7 p-md-9 p-lg-10 animate__animated animate__faster animate__fadeInRight"
     >
-        <h1 class="title">Alta</h1>
-        <div class="p-d-flex p-flex-column p-jc-between p-ai-start">
-            <div class="dropdown p-d-flex p-flex-row p-jc-between p-ai-center">
-                <span class="p-col-4">Marca:</span>
+        <div class="p-grid p-flex-column p-jc-between p-ai-start">
+            <h1 class="title">Alta</h1>
+            <div class="dropdown p-grid p-jc-between p-ai-center">
+                <label>Marca:</label>
                 <Dropdown
                     v-model="selectedBrand"
                     :options="brands"
@@ -14,8 +14,8 @@
                     placeholder="Seleccione una marca"
                 />
             </div>
-            <div class="dropdown p-d-flex p-flex-row p-jc-between p-ai-center">
-                <span class="p-col-4">Modelo:</span>
+            <div class="dropdown p-grid p-jc-between p-ai-center">
+                <label>Modelo:</label>
                 <Dropdown
                     v-model="selectedModel"
                     :options="models"
@@ -25,8 +25,8 @@
                     :disabled="isDisabled"
                 />
             </div>
-            <div class="input p-d-flex p-flex-row p-jc-between p-ai-center">
-                <span class="p-col-4">Matrícula:</span>
+            <div class="input p-grid p-jc-between p-ai-center">
+                <label>Matrícula:</label>
                 <input-text
                     type="text"
                     v-model="plate"
@@ -41,11 +41,13 @@
             @click="saveCar"
         />
     </div>
+    <Toast position="top-center" />
 </template>
 
 <script>
 import { defineComponent, ref, onMounted, watch } from "vue";
 import axios from "axios";
+import { useToast } from "primevue/usetoast";
 
 export default defineComponent({
     setup() {
@@ -71,6 +73,7 @@ export default defineComponent({
                 id: Number
             }
         };
+        const toast = useToast();
         const getBrands = async () => {
             await axios
                 .get(url + "marca")
@@ -99,7 +102,20 @@ export default defineComponent({
             await axios
                 .post(url, car)
                 .then(async (res) => {
-                    await console.log(res.status);
+                    if (res.status === 200)
+                        toast.add({
+                            severity: "success",
+                            summary: "Éxito",
+                            detail: "Registro guardado correctamente",
+                            life: 3000
+                        });
+                    else
+                        toast.add({
+                            severity: "error",
+                            summary: "Error",
+                            detail: "No se pudo guardar el registro",
+                            life: 3000
+                        });
                 })
                 .catch((error) => console.log(error));
         };
@@ -121,8 +137,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
+label {
+    width: 7rem;
+    margin-left: 1rem;
+}
+
+.p-dropdown {
+    width: 14rem;
+}
+
 .title {
     color: blue;
+    margin-left: 0.5rem;
 }
 
 .dropdown,
