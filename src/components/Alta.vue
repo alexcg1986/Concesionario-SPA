@@ -55,9 +55,9 @@ export default defineComponent({
         const isDisabled = ref(true);
         const selectedBrand = ref();
         const selectedModel = ref();
+        const plate = ref();
         const brands = ref([]);
         const models = ref([]);
-        const plate = ref();
         const parameters = {
             marcaId: Number
         };
@@ -95,6 +95,42 @@ export default defineComponent({
                 });
         };
         const saveCar = async () => {
+            if (!selectedBrand.value) {
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "No ha elegido la marca",
+                    life: 3000
+                });
+                return;
+            }
+            if (!selectedModel.value) {
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "No ha elegido el modelo",
+                    life: 3000
+                });
+                return;
+            }
+            if (!plate.value) {
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "No ha introducido la matrícula",
+                    life: 3000
+                });
+                return;
+            }
+            if (!plate.value.match("\\d{4}-\\w{3}")) {
+                toast.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Matrícula incorrecta",
+                    life: 3000
+                });
+                return;
+            }
             car.marca.id = selectedBrand.value;
             car.modelo.id = selectedModel.value;
             car.matricula = plate.value;

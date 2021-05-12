@@ -16,13 +16,13 @@
             </div>
             <div>
                 <DataTable
-                    class="p-mt-2 p-mr-3"
+                    class="p-mt-2 p-mr-3 p-mb-5"
                     :value="cars"
                     stripedRows
                     responsiveLayout="stack"
                 >
                     <template #empty>
-                        No hay coches que mostrar
+                        No hay coches que mostrarz
                     </template>
                     <Column field="id" header="Id"></Column>
                     <Column field="marca.nombre" header="Marca"></Column>
