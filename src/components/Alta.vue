@@ -133,7 +133,7 @@ export default defineComponent({
             }
             car.marca.id = selectedBrand.value;
             car.modelo.id = selectedModel.value;
-            car.matricula = plate.value;
+            car.matricula = plate.value.toUpperCase();
             car.usuario.id = 1;
             await axios
                 .post(url, car)
@@ -156,7 +156,10 @@ export default defineComponent({
                 .catch((error) => console.log(error));
         };
         onMounted(getBrands);
-        watch(selectedBrand, getModels);
+        watch(selectedBrand, () => {
+            selectedModel.value = "";
+            getModels();
+        });
         return {
             isDisabled,
             selectedBrand,

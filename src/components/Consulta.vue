@@ -22,7 +22,7 @@
                     responsiveLayout="stack"
                 >
                     <template #empty>
-                        No hay coches que mostrarz
+                        No hay coches que mostrar
                     </template>
                     <Column field="id" header="Id"></Column>
                     <Column field="marca.nombre" header="Marca"></Column>
