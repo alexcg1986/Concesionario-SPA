@@ -18,7 +18,12 @@ import "animate.css";
 
 createApp(App)
     .use(router)
-    .use(PrimeVue, { ripple: true })
+    .use(PrimeVue, {
+        ripple: true,
+        locale: {
+            emptyMessage: "Sin resultados"
+        }
+    })
     .use(ToastService)
     .component("Button", Button)
     .component("Dropdown", Dropdown)
