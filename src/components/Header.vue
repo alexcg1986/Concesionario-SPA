@@ -1,5 +1,5 @@
 <template>
-    <div class="header p-grid p-d-flex p-flex-row p-jc-end p-ai-center">
+    <div class="header p-grid p-flex-row p-jc-end p-ai-center">
         <img class="logo" alt="teknei logo" src="@/assets/teknei-logo.png" />
     </div>
 </template>
